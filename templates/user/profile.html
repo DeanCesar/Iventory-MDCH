@@ -1,0 +1,53 @@
+{% extends 'partials/base.html' %}
+{% block title %} Login Page {% endblock %}
+{% load crispy_forms_tags %}
+
+{%block content%}
+<div class="container">
+    <div class="row my-4">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Página de Detalles del Cliente
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="h4"> Información del Perfil</span> <a class="btn btn-info btn-sm float-right"
+                                href="{% url 'user-profile-update'%}">Edit</a>
+                            <hr>
+                            <table class="table bg-white table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Nombre</th>
+                                        <td>{{user.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Email</th>
+                                        <td>{{user.email}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Teléfono</th>
+                                        <td>{{user.profile.phone}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dirección</th>
+                                        <td>{{user.profile.address}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-md-4">
+                            <img class="img-thumbnail" src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}/media/avatar.jpg{% endif %}" alt="Profile Image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,12 @@
+body{
+    background: rgb(230, 227, 227);
+}
+
+.my-card:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease-in-out;
+}
+.navbar-nav li {
+    list-style: none;  /* Elimina cualquier punto de lista */
+    margin: 0;  /* Elimina márgenes predeterminados */
+}

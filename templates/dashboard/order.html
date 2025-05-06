@@ -1,0 +1,44 @@
+{% extends 'partials/base.html'%}
+{% block title %}Order Page{%endblock%}
+
+
+{% block content%}
+{% include 'partials/topnav.html'%}
+    <!--Table-->
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-8">
+                <table class="table bg-white">
+                    <thead class="bg-info">
+                        <tr class="text-white">
+                            <th scope="col">Producto</th>
+                            <th scope="col">Categoría</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Ordenado por</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in order %}
+                        <tr>
+                            <td>{{ order.product }}</td>
+                            <td>{{ order.product.category }}</td>
+                            <td>{{ order.order_quantity }}</td>
+                            <td>{{ order.staff.username }}</td>
+                            <td>{{ order.date }}</td>
+                        </tr>
+                        {% endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!--End Table-->
+{% endblock%}
