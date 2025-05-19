@@ -24,7 +24,16 @@ class Order(models.Model):
     staff=models.ForeignKey(User, models.CASCADE, null=True, blank=True)
     order_quantity=models.PositiveIntegerField(null=True)
     date=models.DateTimeField(auto_now_add=True)
-
+    STATUS_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('aceptada', 'Aceptada'),
+        ('denegada', 'Denegada'),
+    ]
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pendiente'
+    )
 
     class   Meta:
         verbose_name_plural= 'Order'
