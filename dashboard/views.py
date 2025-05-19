@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib .auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from .models import Product, Order
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
@@ -109,7 +109,7 @@ def product_update(request, pk):
     return render(request, 'dashboard/product_update.html', context)
 @login_required
 def order(request):
-    order = Order.objects.all()
+    order = Order.objects.filter(status='pendiente')
     orders_count=order.count()
     workers_count =User.objects.all().count()
     product_count=Product.objects.all().count()
@@ -124,3 +124,35 @@ def order(request):
     return render(request, 'dashboard/order.html', context)
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def accept_order(request, order_id):
+    # Solo permitir si el usuario es staff/admin
+    if not request.user.is_staff:
+        return redirect('dashboard-order')  # opcional: o mostrar error/403
+
+    order = get_object_or_404(Order, pk=order_id)
+    if order.status == 'pendiente':
+        # Actualizar estado a "aceptada"
+        order.status = 'aceptada'
+        # Actualizar stock del producto asociado
+        product = order.product
+        product.quantity -= order.cantidad  # descontar la cantidad pedida del stock
+        # Si se desea, verificar que product.quantity no quede negativo
+        product.save()
+        order.save()
+    # Redirigir de vuelta a la lista de pendientes (dashboard-order)
+    return redirect('dashboard-order')
+
+
+@login_required
+def deny_order(request, order_id):
+    if not request.user.is_staff:
+        return redirect('dashboard-order')
+    order = get_object_or_404(Order, pk=order_id)
+    if order.status == 'pendiente':
+        order.status = 'denegada'
+        order.save()
+    return redirect('dashboard-order')
