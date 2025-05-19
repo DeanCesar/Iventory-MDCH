@@ -1,57 +1,68 @@
 {% extends 'partials/base.html'%}
 {% block title %}Order Page{%endblock%}
 
-
-{% block content%}
+{% block content %}
 {% include 'partials/topnav.html'%}
-    <!--Table-->
-    <div class="container">
-        <div class="row my-4">
-            <div class="col-md-4">
 
-            </div>
-            <div class="col-md-8">
-                <table class="table bg-white">
-                    <thead class="bg-info">
-                        <tr class="text-white">
-                            <th scope="col">Producto</th>
-                            <th scope="col">Categoría</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Ordenado     por</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in order %}
-                        <tr>
-                            <td>{{ order.product }}</td>
-                            <td>{{ order.product.category }}</td>
-                            <td>{{ order.order_quantity }}</td>
-                            <td>{{ order.staff.username }}</td>
-                            <td>{{ order.date }}</td>
-                            <td>
-                                {% if user.is_staff %}
-                                <form action="{% url 'dashboard-accept-order' order.id %}" method="POST" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
-                                </form>
-                                <form action="{% url 'dashboard-deny-order' order.id %}" method="POST" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm">Denegar</button>
-                                </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor%}
-                    </tbody>
-                </table>
-            </div>
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+    {% endfor %}
+  </div>
+{% endif %}
 
+<!--Table-->
+<div class="container">
+    <div class="row my-4">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-8">
+            <table class="table bg-white">
+                <thead class="bg-info">
+                    <tr class="text-white">
+                        <th scope="col">Producto</th>
+                        <th scope="col">Categoría</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Ordenado por</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in order %}
+                    <tr>
+                        <td>{{ order.product }}</td>
+                        <td>{{ order.product.category }}</td>
+                        <td>{{ order.order_quantity }}</td>
+                        <td>{{ order.staff.username }}</td>
+                        <td>{{ order.date }}</td>
+                        <td>
+                            {% if user.is_staff %}
+                            <form action="{% url 'dashboard-accept-order' order.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
+                            </form>
+                            <form action="{% url 'dashboard-deny-order' order.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Denegar</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
+</div>
 
-
-    <!--End Table-->
-{% endblock%}
+<!--End Table-->
+{% endblock %}

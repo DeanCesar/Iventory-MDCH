@@ -143,7 +143,8 @@ def accept_order(request, order_id):
             product.save()
             order.save()
         else:
-            # Aquí podrías manejar el caso de stock insuficiente (mensaje de error, etc.)
+            messages.warning(request, 'No hay la suficiente cantidad productos en el Stock.') # ejemplo
+       
             pass
     # Redirigir de vuelta a la lista de pendientes (dashboard-order)
     return redirect('dashboard-order')
