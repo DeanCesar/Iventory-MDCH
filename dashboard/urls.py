@@ -12,4 +12,5 @@ urlpatterns=[
     path('order/', views.order, name='dashboard-order'),
     path('order/accept/<int:order_id>/', views.accept_order, name='dashboard-accept-order'),
     path('order/deny/<int:order_id>/', views.deny_order, name='dashboard-deny-order'),
+    path('order/accepted/', views.shipped_orders, name='dashboard-shipped'),
 ]

@@ -135,14 +135,16 @@ def accept_order(request, order_id):
 
     order = get_object_or_404(Order, pk=order_id)
     if order.status == 'pendiente':
-        # Actualizar estado a "aceptada"
         order.status = 'aceptada'
-        # Actualizar stock del producto asociado
         product = order.product
-        product.quantity -= order.cantidad  # descontar la cantidad pedida del stock
-        # Si se desea, verificar que product.quantity no quede negativo
-        product.save()
-        order.save()
+        quantity_to_subtract = order.order_quantity
+        if product.quantity >= quantity_to_subtract:
+            product.quantity -= quantity_to_subtract
+            product.save()
+            order.save()
+        else:
+            # Aquí podrías manejar el caso de stock insuficiente (mensaje de error, etc.)
+            pass
     # Redirigir de vuelta a la lista de pendientes (dashboard-order)
     return redirect('dashboard-order')
 
@@ -156,3 +158,14 @@ def deny_order(request, order_id):
         order.status = 'denegada'
         order.save()
     return redirect('dashboard-order')
+
+
+@login_required
+def shipped_orders(request):
+    if not request.user.is_staff:
+        return redirect('dashboard-order')
+    accepted_orders = Order.objects.filter(status='aceptada')
+    context = {
+        'orders': accepted_orders
+    }
+    return render(request, 'dashboard/shipped.html', context)
