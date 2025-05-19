@@ -142,3 +142,7 @@ EMAIL_PORT= 587
 EMAIL_USE_TLS= True
 EMAIL_HOST_USER= 'chugay1943libertad@gmail.com'
 EMAIL_HOST_PASSWORD= 'tvrhseqzfvmgrxwc'
+
+
+
+
