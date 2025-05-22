@@ -1,53 +1,57 @@
-{% block content%}
+
 {% include 'partials/topnav.html'%}
-    <!--Table-->
-    <div class="container">
-        <div class="row my-4">
-            <div class="col-md-4">
+{% block content %}
+<div class="container-fluid">
+  <h3>Órdenes Aceptadas</h3>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Ordenado por</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for orden in accepted_orders %}
+      <tr>
+        <td>{{ orden.producto }}</td>
+        <td>{{ orden.producto.categoria }}</td>
+        <td>{{ orden.cantidad }}</td>
+        <td>{{ orden.ordenado_por }}</td>
+        <td>{{ orden.fecha|date:"d M Y H:i" }}</td>  <!-- formato fecha corto -->
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center">No hay órdenes aceptadas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-            </div>
-            <div class="col-md-8">
-                <table class="table bg-white">
-                    <thead class="bg-info">
-                        <tr class="text-white">
-                            <th scope="col">Producto</th>
-                            <th scope="col">Categoría</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Ordenado     por</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in order %}
-                        <tr>
-                            <td>{{ order.product }}</td>
-                            <td>{{ order.product.category }}</td>
-                            <td>{{ order.order_quantity }}</td>
-                            <td>{{ order.staff.username }}</td>
-                            <td>{{ order.date }}</td>
-                            <td>
-                                {% if user.is_staff %}
-                                <form action="{% url 'dashboard-accept-order' order.id %}" method="POST" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
-                                </form>
-                                <form action="{% url 'dashboard-deny-order' order.id %}" method="POST" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm">Denegar</button>
-                                </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor%}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-
-
-    <!--End Table-->
-{% endblock%}
+  <h3>Órdenes Denegadas</h3>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Ordenado por</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for orden in denied_orders %}
+      <tr>
+        <td>{{ orden.producto }}</td>
+        <td>{{ orden.producto.categoria }}</td>
+        <td>{{ orden.cantidad }}</td>
+        <td>{{ orden.ordenado_por }}</td>
+        <td>{{ orden.fecha|date:"d M Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center">No hay órdenes denegadas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

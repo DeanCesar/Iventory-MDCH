@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Product, Order
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
@@ -170,3 +170,16 @@ def shipped_orders(request):
         'orders': accepted_orders
     }
     return render(request, 'dashboard/shipped.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)  # opcional: solo admins (is_staff)
+def records(request):
+    # Filtrar órdenes por estado
+    accepted_orders = Order.objects.filter(status='aceptada')
+    denied_orders   = Order.objects.filter(status='denegada')
+    contexto = {
+        'accepted_orders': accepted_orders,
+        'denied_orders': denied_orders,
+    }
+    return render(request, 'dashboard/records.html', contexto)
